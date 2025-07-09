@@ -11,6 +11,8 @@ const Room = () => {
   const [username, setUsername] = useState(null);
   const hasJoinedRef = useRef(false);
   const [users,setUsers]=useState([]);
+  const [typingUser,setTypingUser]=useState(null);
+  const [showToast , setShowToast]=useState(null);
 
   // 🔒 Ask for username and store safely
   useEffect(() => {
@@ -50,11 +52,19 @@ const Room = () => {
     });
 
     socket.on("user-joined", (name) => {
-      console.log(`📥 ${name} joined the room.`);
+      setShowToast(`${name} joined`);
+      setTimeout(()=>setShowToast(null),3000);
+    });
+    socket.on("user-typing",(name)=>{
+      if(name!==username)setTypingUser(name);
+    });
+    socket.on("user-stop-typing",()=>{
+      setTypingUser(null);
     });
     socket.on("room-users",(activeUsers)=>{
       setUsers(activeUsers.map(u=>u.username));
     });
+    
 
     return () => {
       socket.off("code-update");
@@ -62,12 +72,18 @@ const Room = () => {
       socket.off("room-users");
     };
   }, [roomId, username]);
-
+   let typingTimeout;
   // ✏️ Code change handler
   const handleEditorChange = (value) => {
     editorRef.current = value;
     setCode(value);
     socket.emit("code-change", { roomId, code: value });
+
+    socket.emit("typing",{roomId,username});
+    clearTimeout(typingTimeout);
+    typingTimeout=setTimeout(()=>{
+      socket.emit("stop-typing",{roomId});
+    },1000);
   };
 
   return (
@@ -75,6 +91,16 @@ const Room = () => {
       <header className="py-4 text-center text-xl font-semibold bg-gray-800">
         🧠 CollabSync – Room: {roomId}
       </header>
+      {showToast &&  (
+        <div className="bg-green-600 text-white text-sm text-center py-1">
+          {showToast}
+          </div>
+      )}
+      {typingUser && (
+        <div className="text-center text-sm text-gray-300 italic">
+          {typingUser} is typing...
+          </div>
+      )}
       <div ClassName="bg-gray-800 p-2 text-sm text-white flex gap-4 justify-center">
         active:{users.join(",")}
       </div>

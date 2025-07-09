@@ -54,6 +54,12 @@ io.on("connection", (socket) => {
     currentCode = code;
     socket.to(roomId).emit("code-update", code);
   });
+  socket.on("typing",({roomId,username})=>{
+    socket.to(roomId).emit("user-typing",username);
+  });
+  socket.on("stop-typing", ({ roomId }) => {
+    socket.to(roomId).emit("user-stop-typing");
+  });
 
   // ❌ Handle Disconnect
   socket.on("disconnect", () => {
