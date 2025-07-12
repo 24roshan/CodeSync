@@ -25,7 +25,7 @@ const roomCodeMap={};
 io.on("connection", (socket) => {
   console.log(` Client connected: ${socket.id}`);
 socket.on("cursor_update", ({ roomId, username, selection }) => {
-  console.log("📍 Cursor Update:", username, selection);
+  console.log("Cursor Update:", username, selection);
   socket.to(roomId).emit("cursor_update", { username, selection });
 });
 
@@ -81,7 +81,7 @@ socket.on("cursor_update", ({ roomId, username, selection }) => {
       );
       socket.to(roomId).emit("user-left", username);
       io.to(roomId).emit("room-users", usersInRoom[roomId]);
-      console.log(`👋 ${username} left room ${roomId}`);
+      console.log(` ${username} left room ${roomId}`);
 
     }
 

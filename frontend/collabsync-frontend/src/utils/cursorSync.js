@@ -1,6 +1,3 @@
-// utils/cursorSync.js
-
-// 🎨 Color map based on username hash
 const getColorForUser = (username) => {
   const colors = [
     "rgba(255, 99, 132, 0.3)", // red
@@ -15,8 +12,6 @@ const getColorForUser = (username) => {
     colors.length;
   return colors[index];
 };
-
-// 📤 Emit cursor position
 export const sendCursorUpdate = (editor, socket, roomId, username) => {
   editor.onDidChangeCursorSelection((e) => {
     const selection = e.selection;
@@ -32,8 +27,6 @@ export const sendCursorUpdate = (editor, socket, roomId, username) => {
     });
   });
 };
-
-// 🎯 Render remote cursors with decorations
 export const renderRemoteCursor = (editor, remoteCursorMap) => {
   Object.entries(remoteCursorMap).forEach(
     ([user, { selection, decorationIds }]) => {

@@ -11,7 +11,7 @@ const Home = () => {
 
   const handleCreateRoom = () => {
     if (!username.trim()) {
-      alert("⚠️ Please enter your name before creating a room.");
+      alert(" Please enter your name before creating a room.");
       return;
     }
     const newRoomId = crypto.randomUUID();
@@ -20,7 +20,7 @@ const Home = () => {
 
   const handleJoinRoom = () => {
     if (!roomId.trim() || !username.trim()) {
-      alert("⚠️ Enter both username and room ID to join a room.");
+      alert(" Enter both username and room ID to join a room.");
       return;
     }
     navigate(`/room/${roomId.trim()}?username=${username.trim()}`);
@@ -42,7 +42,7 @@ const Home = () => {
           <Rocket className="w-6 h-6 animate-bounce" /> CollabSync
         </h1>
         <p className="text-gray-300 mb-6 text-sm tracking-wide">
-          🚀 Real-time Code Collaboration Platform for Teams
+           Real-time Code Collaboration Platform for Teams
         </p>
 
         <div className="space-y-4">
@@ -95,7 +95,7 @@ const Home = () => {
       </div>
 
       <footer className="mt-6 text-xs text-white opacity-70 z-10">
-        © 2025 CollabSync — Made with 💖 by Roshan Jha
+        © 2025 CollabSync — Made by Roshan Jha
       </footer>
     </div>
   );

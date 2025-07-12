@@ -9,7 +9,7 @@ const Room = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
   const editorRef = useRef(null);
-  const [code, setCode] = useState("// start coding 💻");
+  const [code, setCode] = useState("// start coding ");
   const [username, setUsername] = useState(null);
   const hasJoinedRef = useRef(false);
   const [users, setUsers] = useState([]);
@@ -33,7 +33,7 @@ const Room = () => {
        while (!inputName || inputName.trim() === "") {
          inputName = prompt("Enter your name to join the room:");
          if (inputName === null) {
-           alert("❌ Username is required to join the room.");
+           alert(" Username is required to join the room.");
            navigate("/");
            return;
          }
@@ -51,7 +51,7 @@ const Room = () => {
   useEffect(() => {
     if (!username || !roomId || hasJoinedRef.current) return;
 
-    console.log("⚡ Joining room:", { roomId, username });
+    console.log(" Joining room:", { roomId, username });
     socket.emit("join-room", { roomId, username });
     hasJoinedRef.current = true;
     socket.on("loadCode", (code) => {
@@ -70,11 +70,11 @@ const Room = () => {
       setTimeout(() => setShowToast(null), 3000);
     });
     socket.on("user-typing", (name) => {
-      console.log("✍️ Typing from:", name);
+      console.log("Typing from:", name);
       if (name !== username) setTypingUser(name);
     });
     socket.on("user-stop-typing", () => {
-      console.log("🛑 Typing stopped");
+      console.log(" Typing stopped");
       setTypingUser(null);
     });
     socket.on("room-users", (activeUsers) => {
@@ -107,7 +107,7 @@ const Room = () => {
       setShowToast("🔗 Room link copied!");
       setTimeout(() => setShowToast(null), 3000);
     } else {
-      setShowToast("❌ Room ID not found.");
+      setShowToast(" Room ID not found.");
       setTimeout(() => setShowToast(null), 3000);
     }
   };
@@ -116,7 +116,7 @@ const Room = () => {
   return (
     <div className="h-screen bg-gray-900 text-white flex flex-col">
       <header className="py-4 text-center text-xl font-semibold bg-gray-800">
-        🧠 CollabSync – Room: {roomId}
+         CollabSync – Room: {roomId}
         <div className="space-x-2">
           <button
             onClick={() => {
@@ -142,7 +142,7 @@ const Room = () => {
             onClick={handleCopyJoinLink}
             className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm ml-4"
           >
-            📋 Copy Room Link
+             Copy Room Link
           </button>
         </div>
       </header>
@@ -153,7 +153,7 @@ const Room = () => {
       )}
       {typingUser && (
         <div className="text-center text-sm text-gray-300 italic flex items-center justify-center gap-1">
-          ✍️ {typingUser} is typing
+           {typingUser} is typing
           <span className="animate-bounce">.</span>
           <span className="animate-bounce delay-200">.</span>
           <span className="animate-bounce delay-400">.</span>
@@ -177,7 +177,7 @@ const Room = () => {
                 <span>{u === username ? `${u} (You)` : u}</span>
                 {u === typingUser && (
                   <span className="text-xs italic text-gray-300 animate-pulse ml-2">
-                    ✍️ typing...
+                    typing...
                   </span>
                 )}
               </li>
