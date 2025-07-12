@@ -1,7 +1,5 @@
-// Home.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ThemeToggle from "../components/ThemeToggle";
 import { Rocket, Users, Key, Sparkles, LogIn } from "lucide-react";
 
 const Home = () => {
@@ -20,32 +18,34 @@ const Home = () => {
 
   const handleJoinRoom = () => {
     if (!roomId.trim() || !username.trim()) {
-      alert(" Enter both username and room ID to join a room.");
+      alert("Enter both username and room ID to join a room.");
       return;
     }
     navigate(`/room/${roomId.trim()}?username=${username.trim()}`);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-[#0f2027] via-[#203a43] to-[#2c5364] text-white flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen w-full bg-gradient-to-tr from-[#0f2027] via-[#203a43] to-[#2c5364] text-white flex items-center justify-center p-6 relative overflow-hidden">
       <div className="absolute top-4 right-4 z-10">
-        <ThemeToggle />
       </div>
 
-      <div className="absolute inset-0 z-0">
-        <div className="w-96 h-96 bg-pink-400 rounded-full blur-3xl opacity-30 absolute -top-10 -left-10 animate-pulse"></div>
-        <div className="w-96 h-96 bg-purple-400 rounded-full blur-3xl opacity-30 absolute bottom-0 right-0 animate-pulse"></div>
+
+      <div className="absolute inset-0 -z-10">
+        <div className="w-96 h-96 bg-pink-500 rounded-full blur-3xl opacity-20 absolute -top-16 -left-16 animate-pulse"></div>
+        <div className="w-96 h-96 bg-purple-500 rounded-full blur-3xl opacity-20 absolute bottom-10 right-10 animate-pulse"></div>
+        <div className="w-80 h-80 bg-cyan-400 rounded-full blur-3xl opacity-20 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
       </div>
 
-      <div className="relative z-10 bg-white/10 dark:bg-black/20 backdrop-blur-lg rounded-2xl shadow-xl p-10 max-w-md w-full text-center transition-all border border-white/10">
+      <div className="relative z-10 bg-white/10 dark:bg-black/20 backdrop-blur-md rounded-2xl shadow-2xl p-10 max-w-md w-full text-center border border-white/10 transition-all">
         <h1 className="text-4xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 flex justify-center items-center gap-2">
           <Rocket className="w-6 h-6 animate-bounce" /> CollabSync
         </h1>
         <p className="text-gray-300 mb-6 text-sm tracking-wide">
-           Real-time Code Collaboration Platform for Teams
+          Real-time Code Collaboration Platform for Teams
         </p>
 
         <div className="space-y-4">
+       
           <div className="flex items-center gap-2">
             <Users className="w-5 h-5 text-yellow-400" />
             <input
@@ -57,6 +57,7 @@ const Home = () => {
             />
           </div>
 
+ 
           <div className="flex items-center gap-2">
             <Key className="w-5 h-5 text-pink-500" />
             <input
@@ -68,6 +69,7 @@ const Home = () => {
             />
           </div>
 
+       
           <div className="flex gap-4 justify-center">
             <button
               onClick={handleCreateRoom}
@@ -90,12 +92,12 @@ const Home = () => {
         </div>
 
         <p className="mt-6 text-xs text-gray-300">
-          💡 Collaborate. Code. Ship faster.
+           Collaborate. Code. Ship faster.
         </p>
       </div>
 
-      <footer className="mt-6 text-xs text-white opacity-70 z-10">
-        © 2025 CollabSync — Made by Roshan Jha
+      <footer className="absolute bottom-4 text-xs text-white opacity-70 z-10">
+        © 2025 CollabSync — Made by Roshan Jha 
       </footer>
     </div>
   );
