@@ -19,25 +19,32 @@ const Room = () => {
 
   // 🔒 Ask for username and store safely
   useEffect(() => {
-    let storedName = sessionStorage.getItem("username");
+   let storedName = sessionStorage.getItem("username");
 
-    if (!storedName) {
-      let inputName = "";
+   if (!storedName) {
+     const urlParams = new URLSearchParams(window.location.search);
+     const fromUrl = urlParams.get("username");
 
-      while (!inputName || inputName.trim() === "") {
-        inputName = prompt("Enter your name to join the room:");
-        if (inputName === null) {
-          alert("❌ Username is required to join the room.");
-          navigate("/"); // 🔁 Redirect to homepage
-          return;
-        }
-      }
+     if (fromUrl && fromUrl.trim() !== "") {
+       storedName = fromUrl.trim();
+       sessionStorage.setItem("username", storedName);
+     } else {
+       let inputName = "";
+       while (!inputName || inputName.trim() === "") {
+         inputName = prompt("Enter your name to join the room:");
+         if (inputName === null) {
+           alert("❌ Username is required to join the room.");
+           navigate("/");
+           return;
+         }
+       }
+       storedName = inputName.trim();
+       sessionStorage.setItem("username", storedName);
+     }
+   }
 
-      storedName = inputName.trim();
-      sessionStorage.setItem("username", storedName);
-    }
+   setUsername(storedName);
 
-    setUsername(storedName);
   }, [navigate]);
 
   // 🔁 Join room and setup listeners
