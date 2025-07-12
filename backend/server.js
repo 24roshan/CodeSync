@@ -18,16 +18,21 @@ const io = new Server(server, {
 app.use(cors());
 app.get("/", (req, res) => res.send("CollabSync Backend Running ✅"));
 
-// ✅ Shared data store
-let currentCode = "// shared collab code";
+//  Shared data store
 const usersInRoom = {};
+const roomCodeMap={};
 
 io.on("connection", (socket) => {
-  console.log(`🟢 Client connected: ${socket.id}`);
+  console.log(` Client connected: ${socket.id}`);
+socket.on("cursor_update", ({ roomId, username, selection }) => {
+  console.log("📍 Cursor Update:", username, selection);
+  socket.to(roomId).emit("cursor_update", { username, selection });
+});
 
-  // 🧠 Join Room
+  // Join Room
   socket.on("join-room", ({ roomId, username }) => {
     socket.join(roomId);
+    socket.emit("loadCode",roomCodeMap[roomId]|| "");
     socket.username = username;
     socket.roomId = roomId;
 
@@ -37,21 +42,25 @@ io.on("connection", (socket) => {
     const alreadyInRoom = usersInRoom[roomId].some(
       (u) => u.socketId === socket.id
     );
+    const sameUsernameExists=usersInRoom[roomId].some((u)=>u.username===username);
+  
+    
 
-    if (!alreadyInRoom) {
+    if (!alreadyInRoom &&!sameUsernameExists) {
       usersInRoom[roomId].push({ username, socketId: socket.id });
-      console.log(`✅ SERVER LOG: ${username} joined room ${roomId}`);
+      console.log(`SERVER LOG: ${username} joined room ${roomId}`);
       socket.to(roomId).emit("user-joined", username);
     }
     io.to(roomId).emit("room-users",usersInRoom[roomId]);
 
     // Send latest code to the new user
-    socket.emit("code-update", currentCode);
+    socket.emit("code-update", roomCodeMap[roomId]);
   });
 
   // 🔄 Code Change
   socket.on("code-change", ({ roomId, code }) => {
-    currentCode = code;
+     if(!roomId)return;
+    roomCodeMap[roomId]=code;
     socket.to(roomId).emit("code-update", code);
   });
   socket.on("typing",({roomId,username})=>{
@@ -61,24 +70,24 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("user-stop-typing");
   });
 
-  // ❌ Handle Disconnect
+  //  Handle Disconnect
   socket.on("disconnect", () => {
     const { username, roomId } = socket;
 
-    if (username && roomId && usersInRoom[roomId]) {
+    if (username && roomId ) {
       // Remove this socket from list
       usersInRoom[roomId] = usersInRoom[roomId]?.filter(
         (u) => u.socketId !== socket.id
       );
-      io.to(roomId).emit("room-users", usersInRoom[roomId]);
-
-      console.log(`👋 ${username} left room ${roomId}`);
       socket.to(roomId).emit("user-left", username);
+      io.to(roomId).emit("room-users", usersInRoom[roomId]);
+      console.log(`👋 ${username} left room ${roomId}`);
+
     }
 
-    console.log(`🔴 Client disconnected: ${socket.id}`);
+    console.log(`Client disconnected: ${socket.id}`);
   });
 });
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

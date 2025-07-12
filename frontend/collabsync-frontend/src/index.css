@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* For the vertical cursor */
+.foreign-cursor {
+  border-left: 2px solid white;
+  margin-left: -1px;
+  position: relative;
+  z-index: 10;
+}
+
+/* For the username label */
+.cursor-label {
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 1px 6px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 4px;
+  margin-left: 6px;
+  position: absolute;
+  top: -1.2rem;
+  white-space: nowrap;
+  z-index: 100;
+}
+body {
+  @apply transition-colors duration-500;
+}
+
+
+  
