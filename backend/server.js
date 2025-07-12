@@ -3,6 +3,7 @@ import cors from "cors";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import dotenv from "dotenv";
+import axios from "axios";
 
 dotenv.config();
 
@@ -17,6 +18,35 @@ const io = new Server(server, {
 
 app.use(cors());
 app.get("/", (req, res) => res.send("CollabSync Backend Running ✅"));
+app.use(express.json()); // <-- Ensure you can parse JSON POST bodies
+
+app.post("/api/run", async (req, res) => {
+  const { code, language } = req.body;
+
+  const langMap = {
+    javascript: "nodejs",
+    python: "python3",
+    cpp: "cpp17",
+  };
+
+  const lang = langMap[language];
+  if (!lang) return res.status(400).json({ output: "Unsupported language" });
+
+  try {
+    const response = await axios.post("https://api.jdoodle.com/v1/execute", {
+      clientId: process.env.JDOODLE_CLIENT_ID,
+      clientSecret: process.env.JDOODLE_CLIENT_SECRET,
+      script: code,
+      language: lang,
+      versionIndex: "0",
+    });
+
+    return res.json({ output: response.data.output });
+  } catch (error) {
+    console.error("JDoodle Error:", error.response?.data || error.message);
+    return res.status(500).json({ output: "Error executing code." });
+  }
+});
 
 //  Shared data store
 const usersInRoom = {};

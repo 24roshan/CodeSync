@@ -16,6 +16,8 @@ const Room = () => {
   const [typingUser, setTypingUser] = useState(null);
   const [showToast, setShowToast] = useState(null);
   const lastReceivedCode = useRef("");
+  const [language, setLanguage] = useState("javascript");
+
 
   // 🔒 Ask for username and store safely
   useEffect(() => {
@@ -111,6 +113,12 @@ const Room = () => {
       setTimeout(() => setShowToast(null), 3000);
     }
   };
+  <select onChange={(e) => setLanguage(e.target.value)} value={language}>
+    <option value="javascript">JavaScript</option>
+    <option value="python">Python</option>
+    <option value="cpp">C++</option>
+  </select>;
+
 
 
   return (
