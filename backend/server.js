@@ -4,6 +4,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import dotenv from "dotenv";
 import axios from "axios";
+import aiRoutes from "./routes/aiRoutes.js";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ const io = new Server(server, {
 
 app.use(cors());
 app.get("/", (req, res) => res.send("CollabSync Backend Running ✅"));
+app.use("/api", aiRoutes);
 app.use(express.json()); // <-- Ensure you can parse JSON POST bodies
 
 app.post("/api/run", async (req, res) => {

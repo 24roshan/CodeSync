@@ -3,14 +3,16 @@ import Editor from "@monaco-editor/react";
 import socket from "../socket";
 import { sendCursorUpdate, renderRemoteCursor } from "../utils/cursorSync";
 import axios from "axios";
+import AIHelperModal from "./AIHelperModal";
 
 const CodeEditor = ({ roomId, username, code, setCode }) => {
   const editorRef = useRef(null);
   const remoteCursorMap = useRef({});
   const typingTimeoutRef = useRef(null);
   const [output, setOutput] = useState(""); // 👈 output state
-
   const [language, setLanguage] = useState("javascript"); 
+  const [aiSuggestion,setAiSuggestion]=useState("");
+  const [showModal,setShowModal]=useState(false);
 
   const handleMount = (editor) => {
     editorRef.current = editor;
@@ -42,8 +44,37 @@ const CodeEditor = ({ roomId, username, code, setCode }) => {
       setOutput(" Error running code");
     }
   };
+const handleAskAI = async () => {
+  const selection = editorRef.current
+    .getModel()
+    .getValueInRange(editorRef.current.getSelection());
 
+  const promptText = selection || editorRef.current.getValue();
+  if (!promptText) return alert("Please write or select some code!");
 
+  try {
+    const res = await axios.post("http://localhost:5000/api/ai-suggest", {
+      prompt: promptText,
+    });
+
+    setAiSuggestion(res.data.suggestion);
+    setShowModal(true);
+  } catch (err) {
+    console.error("AI error:", err);
+    alert("Something went wrong with AI.");
+  }
+};
+const handleInsertSuggestion = ()=>{
+  const editor=editorRef.current;
+  const range=editor.getSelection();
+  editor.executeEdits("",[{
+    range : range,
+    text : aiSuggestion,
+    forceMoveMakers : true,
+  },
+]);
+setShowModal(false);
+}
   const handleChange = (value) => {
     setCode(value);
     socket.emit("code-change", { roomId, code: value });
@@ -105,7 +136,16 @@ const CodeEditor = ({ roomId, username, code, setCode }) => {
         <strong>Output:</strong>
         <pre>{output}</pre>
       </div>
-
+      <button onClick={handleAskAI}
+      className="absolute top-2 right-2 bg purple-600 text-white px-3 py-1 rounded shadow hover:bg-purple-700">Ask AI
+      </button>
+       {showModal && (
+        <AIHelperModal
+        suggestion={aiSuggestion}
+        onClose={()=> setShowModal(false)}
+        onInsert={handleInsertSuggestion}
+        />
+       )}
       <Editor
         height="80vh"
         language={language} 
