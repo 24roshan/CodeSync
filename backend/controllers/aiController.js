@@ -1,34 +1,28 @@
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv";
 dotenv.config();
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-export const getSuggestion = async (req, res) => {
-  const { prompt } = req.body;
-
+export const generateInterviewQuestions = async (req, res) => {
   try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are an AI assistant that helps improve or explain code.",
-        },
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-      max_tokens: 300,
+    const { prompt } = req.body;
+
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash-lite",
     });
 
-    const suggestion = response.choices[0].message.content;
-    res.status(200).json({ suggestion });
+    const result = await model.generateContent(prompt);
+
+    const response = result.response.text();
+
+    res.status(200).json({
+      suggestion: response,
+    });
   } catch (error) {
-    console.error("OpenAI Error:", error.message);
-    res.status(500).json({ error: "AI suggestion failed" });
+    console.error("Gemini Error:", error);
+
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };

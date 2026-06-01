@@ -18,9 +18,9 @@ const io = new Server(server, {
 });
 
 app.use(cors());
+app.use(express.json()); 
 app.get("/", (req, res) => res.send("CollabSync Backend Running ✅"));
-app.use("/api", aiRoutes);
-app.use(express.json()); // <-- Ensure you can parse JSON POST bodies
+app.use("/api/ai", aiRoutes);
 
 app.post("/api/run", async (req, res) => {
   const { code, language } = req.body;
@@ -50,7 +50,7 @@ app.post("/api/run", async (req, res) => {
   }
 });
 
-//  Shared data store
+
 const usersInRoom = {};
 const roomCodeMap={};
 
@@ -61,14 +61,13 @@ socket.on("cursor_update", ({ roomId, username, selection }) => {
   socket.to(roomId).emit("cursor_update", { username, selection });
 });
 
-  // Join Room
+  
   socket.on("join-room", ({ roomId, username }) => {
     socket.join(roomId);
     socket.emit("loadCode",roomCodeMap[roomId]|| "");
     socket.username = username;
     socket.roomId = roomId;
 
-    // Initialize room
     if (!usersInRoom[roomId]) usersInRoom[roomId] = [];
 
     const alreadyInRoom = usersInRoom[roomId].some(
@@ -85,11 +84,11 @@ socket.on("cursor_update", ({ roomId, username, selection }) => {
     }
     io.to(roomId).emit("room-users",usersInRoom[roomId]);
 
-    // Send latest code to the new user
+  
     socket.emit("code-update", roomCodeMap[roomId]);
   });
 
-  // 🔄 Code Change
+
   socket.on("code-change", ({ roomId, code }) => {
      if(!roomId)return;
     roomCodeMap[roomId]=code;
@@ -102,12 +101,12 @@ socket.on("cursor_update", ({ roomId, username, selection }) => {
     socket.to(roomId).emit("user-stop-typing");
   });
 
-  //  Handle Disconnect
+  
   socket.on("disconnect", () => {
     const { username, roomId } = socket;
 
     if (username && roomId ) {
-      // Remove this socket from list
+  
       usersInRoom[roomId] = usersInRoom[roomId]?.filter(
         (u) => u.socketId !== socket.id
       );

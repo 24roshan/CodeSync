@@ -1,6 +1,6 @@
 import express from "express";
-import { getSuggestion } from "../controllers/aiController.js";
+import { generateInterviewQuestions } from "../controllers/aiController.js";
 const router = express.Router();
-router.post("/ai-suggest", getSuggestion);
+router.post("/interview", generateInterviewQuestions);
 
 export default router;

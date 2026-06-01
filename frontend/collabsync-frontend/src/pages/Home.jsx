@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Rocket, Users, Key, Sparkles, LogIn } from "lucide-react";
+import {
+  Rocket,
+  Users,
+  Key,
+  Sparkles,
+  LogIn,
+  Code,
+  Brain,
+  Zap,
+} from "lucide-react";
 
 const Home = () => {
   const [username, setUsername] = useState("");
@@ -9,96 +18,160 @@ const Home = () => {
 
   const handleCreateRoom = () => {
     if (!username.trim()) {
-      alert(" Please enter your name before creating a room.");
+      alert("Please enter your name before creating a room.");
       return;
     }
+
     const newRoomId = crypto.randomUUID();
     navigate(`/room/${newRoomId}?username=${username.trim()}`);
   };
 
   const handleJoinRoom = () => {
-    if (!roomId.trim() || !username.trim()) {
-      alert("Enter both username and room ID to join a room.");
+    if (!username.trim() || !roomId.trim()) {
+      alert("Please enter username and room ID.");
       return;
     }
+
     navigate(`/room/${roomId.trim()}?username=${username.trim()}`);
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-tr from-[#0f2027] via-[#203a43] to-[#2c5364] text-white flex items-center justify-center p-6 relative overflow-hidden">
-      <div className="absolute top-4 right-4 z-10">
+    <div className="min-h-screen bg-[#0a0f1f] text-white flex items-center justify-center px-6 relative overflow-hidden">
+
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[150px]" />
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[150px]" />
+        <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-pink-500/10 rounded-full blur-[150px] -translate-x-1/2 -translate-y-1/2" />
       </div>
 
+      
+      <div className="relative z-10 max-w-5xl w-full">
 
-      <div className="absolute inset-0 -z-10">
-        <div className="w-96 h-96 bg-pink-500 rounded-full blur-3xl opacity-20 absolute -top-16 -left-16 animate-pulse"></div>
-        <div className="w-96 h-96 bg-purple-500 rounded-full blur-3xl opacity-20 absolute bottom-10 right-10 animate-pulse"></div>
-        <div className="w-80 h-80 bg-cyan-400 rounded-full blur-3xl opacity-20 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
-      </div>
+     
+        <div className="text-center mb-10">
 
-      <div className="relative z-10 bg-white/10 dark:bg-black/20 backdrop-blur-md rounded-2xl shadow-2xl p-10 max-w-md w-full text-center border border-white/10 transition-all">
-        <h1 className="text-4xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 flex justify-center items-center gap-2">
-          <Rocket className="w-6 h-6 animate-bounce" /> CollabSync
-        </h1>
-        <p className="text-gray-300 mb-6 text-sm tracking-wide">
-          Real-time Code Collaboration Platform for Teams
-        </p>
+          <h1 className="text-6xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 bg-clip-text text-transparent flex items-center justify-center gap-3">
+            <Rocket size={45} />
+            CodeSync AI
+          </h1>
 
-        <div className="space-y-4">
-       
-          <div className="flex items-center gap-2">
-            <Users className="w-5 h-5 text-yellow-400" />
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter your name"
-              className="w-full px-3 py-2 rounded-md border border-gray-300 text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            />
-          </div>
+          <p className="mt-4 text-gray-300 text-lg max-w-2xl mx-auto">
+            Real-time collaborative coding platform with AI-powered code review,
+            interview preparation, debugging assistance and live team coding.
+          </p>
 
- 
-          <div className="flex items-center gap-2">
-            <Key className="w-5 h-5 text-pink-500" />
-            <input
-              type="text"
-              value={roomId}
-              onChange={(e) => setRoomId(e.target.value)}
-              placeholder="Enter Room ID to join"
-              className="w-full px-3 py-2 rounded-md border border-gray-300 text-black focus:outline-none focus:ring-2 focus:ring-pink-400"
-            />
-          </div>
-
-       
-          <div className="flex gap-4 justify-center">
-            <button
-              onClick={handleCreateRoom}
-              disabled={!username.trim()}
-              className={`flex items-center gap-1 px-4 py-2 rounded-md font-semibold shadow transition-transform duration-200 ${
-                !username.trim()
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-500 hover:scale-105 text-white"
-              }`}
-            >
-              <Sparkles className="w-4 h-4" /> Create Room
-            </button>
-            <button
-              onClick={handleJoinRoom}
-              className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md font-semibold text-white shadow"
-            >
-              <LogIn className="w-4 h-4" /> Join Room
-            </button>
-          </div>
         </div>
 
-        <p className="mt-6 text-xs text-gray-300">
-           Collaborate. Code. Ship faster.
-        </p>
+      
+        <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl shadow-2xl p-8">
+
+          <div className="grid md:grid-cols-2 gap-10">
+
+            <div>
+
+              <h2 className="text-2xl font-bold mb-6">
+                Start Coding Together 🚀
+              </h2>
+
+           
+              <div className="mb-4">
+                <label className="text-sm text-gray-300 block mb-2">
+                  Username
+                </label>
+
+                <div className="flex items-center bg-white/10 rounded-xl px-3">
+                  <Users className="text-cyan-400" size={18} />
+
+                  <input
+                    type="text"
+                    placeholder="Enter your name"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="w-full bg-transparent px-3 py-3 outline-none"
+                  />
+                </div>
+              </div>
+
+             
+              <div className="mb-6">
+                <label className="text-sm text-gray-300 block mb-2">
+                  Room ID
+                </label>
+
+                <div className="flex items-center bg-white/10 rounded-xl px-3">
+                  <Key className="text-pink-400" size={18} />
+
+                  <input
+                    type="text"
+                    placeholder="Enter Room ID"
+                    value={roomId}
+                    onChange={(e) => setRoomId(e.target.value)}
+                    className="w-full bg-transparent px-3 py-3 outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+
+                <button
+                  onClick={handleCreateRoom}
+                  className="flex-1 bg-gradient-to-r from-cyan-500 to-purple-600 hover:scale-105 transition-all py-3 rounded-xl font-semibold flex items-center justify-center gap-2"
+                >
+                  <Sparkles size={18} />
+                  Start Coding
+                </button>
+
+                <button
+                  onClick={handleJoinRoom}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-semibold flex items-center justify-center gap-2"
+                >
+                  <LogIn size={18} />
+                  Join Room
+                </button>
+
+              </div>
+
+            </div>
+
+            <div className="grid grid-cols-1 gap-4">
+
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+                <Code className="text-cyan-400 mb-2" />
+                <h3 className="font-semibold text-lg">Live Collaboration</h3>
+                <p className="text-sm text-gray-400">
+                  Multiple developers coding together in real-time.
+                </p>
+              </div>
+
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+                <Brain className="text-purple-400 mb-2" />
+                <h3 className="font-semibold text-lg">AI Copilot</h3>
+                <p className="text-sm text-gray-400">
+                  Explain code, optimize logic and fix bugs instantly.
+                </p>
+              </div>
+
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+                <Zap className="text-yellow-400 mb-2" />
+                <h3 className="font-semibold text-lg">Interview Mode</h3>
+                <p className="text-sm text-gray-400">
+                  Generate coding interview questions directly from your code.
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div className="text-center mt-8 text-sm text-gray-400">
+          © 2025 CodeSync AI • Built with React, Socket.IO, Monaco Editor &
+          Gemini AI
+        </div>
+
       </div>
 
-      <footer className="absolute bottom-4 text-xs text-white opacity-70 z-10">
-        © 2025 CollabSync — Made by Roshan Jha 
-      </footer>
     </div>
   );
 };

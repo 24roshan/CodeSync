@@ -1,11 +1,11 @@
 const getColorForUser = (username) => {
   const colors = [
-    "rgba(255, 99, 132, 0.3)", // red
-    "rgba(54, 162, 235, 0.3)", // blue
-    "rgba(255, 206, 86, 0.3)", // yellow
-    "rgba(75, 192, 192, 0.3)", // teal
-    "rgba(153, 102, 255, 0.3)", // purple
-    "rgba(255, 159, 64, 0.3)", // orange
+    "rgba(255, 99, 132, 0.3)", 
+    "rgba(54, 162, 235, 0.3)", 
+    "rgba(255, 206, 86, 0.3)",
+    "rgba(75, 192, 192, 0.3)", 
+    "rgba(153, 102, 255, 0.3)", 
+    "rgba(255, 159, 64, 0.3)",
   ];
   const index =
     username.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) %
