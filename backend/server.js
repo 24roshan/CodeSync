@@ -12,11 +12,11 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://code-sync-orcin-two.vercel.app"],
+    methods: ["GET", "POST"],
     credentials: true,
   },
 });
-
 app.use(cors());
 app.use(express.json()); 
 app.get("/", (req, res) => res.send("CollabSync Backend Running ✅"));
