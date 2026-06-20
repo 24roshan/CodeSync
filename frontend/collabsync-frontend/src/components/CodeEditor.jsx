@@ -34,10 +34,13 @@ const CodeEditor = ({ roomId, username, code, setCode }) => {
 
   const runCode = async () => {
     try {
-      const res = await axios.post("http://localhost:5000/api/run", {
-        code,
-        language,
-      });
+      const res = await axios.post(
+        "https://codesync-1-d3cy.onrender.com/api/run",
+        {
+          code,
+          language,
+        },
+      );
 
       setOutput(res.data.output);
     } catch (err) {
@@ -59,9 +62,12 @@ const CodeEditor = ({ roomId, username, code, setCode }) => {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/api/ai/ask", {
-        prompt: promptText,
-      });
+      const res = await axios.post(
+        "https://codesync-1-d3cy.onrender.com/api/ai/ask",
+        {
+          prompt: promptText,
+        },
+      );
 
       setAiSuggestion(
         res.data.suggestion || res.data.interview || "No response received.",
@@ -138,8 +144,6 @@ const CodeEditor = ({ roomId, username, code, setCode }) => {
         >
           ▶ Run Code
         </button>
-
-       
 
         <div className="ml-auto text-sm text-green-400">● Connected</div>
       </div>

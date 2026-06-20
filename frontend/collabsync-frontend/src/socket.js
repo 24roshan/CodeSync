@@ -1,4 +1,4 @@
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5000");
+const socket = io("https://codesync-1-d3cy.onrender.com");
 export default socket;

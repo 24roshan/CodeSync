@@ -24,32 +24,31 @@ const Room = () => {
   const [loadingAI, setLoadingAI] = useState(false);
 
   useEffect(() => {
-   let storedName = sessionStorage.getItem("username");
+    let storedName = sessionStorage.getItem("username");
 
-   if (!storedName) {
-     const urlParams = new URLSearchParams(window.location.search);
-     const fromUrl = urlParams.get("username");
+    if (!storedName) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const fromUrl = urlParams.get("username");
 
-     if (fromUrl && fromUrl.trim() !== "") {
-       storedName = fromUrl.trim();
-       sessionStorage.setItem("username", storedName);
-     } else {
-       let inputName = "";
-       while (!inputName || inputName.trim() === "") {
-         inputName = prompt("Enter your name to join the room:");
-         if (inputName === null) {
-           alert(" Username is required to join the room.");
-           navigate("/");
-           return;
-         }
-       }
-       storedName = inputName.trim();
-       sessionStorage.setItem("username", storedName);
-     }
-   }
+      if (fromUrl && fromUrl.trim() !== "") {
+        storedName = fromUrl.trim();
+        sessionStorage.setItem("username", storedName);
+      } else {
+        let inputName = "";
+        while (!inputName || inputName.trim() === "") {
+          inputName = prompt("Enter your name to join the room:");
+          if (inputName === null) {
+            alert(" Username is required to join the room.");
+            navigate("/");
+            return;
+          }
+        }
+        storedName = inputName.trim();
+        sessionStorage.setItem("username", storedName);
+      }
+    }
 
-   setUsername(storedName);
-
+    setUsername(storedName);
   }, [navigate]);
 
   useEffect(() => {
@@ -122,10 +121,10 @@ const Room = () => {
     <option value="java">java</option>
   </select>;
 
-    const generateInterviewQuestions=async()=>{
-      try{
-        setLoadingAI(true);
-        const prompt=`Analyze this code:${code}
+  const generateInterviewQuestions = async () => {
+    try {
+      setLoadingAI(true);
+      const prompt = `Analyze this code:${code}
         Generate:
         1. 5 Technical Interview Questions
         2. Detailed Answers
@@ -134,21 +133,19 @@ const Room = () => {
         5. Optimization Suggestions
 
         Return response in a clean format.`;
-        const res=await axios.post(
-          "http://localhost:5000/api/ai/interview",
-          {prompt}
-
-        );
-        setSuggestion(res.data.suggestion);
-        setShowAI(true);
-      }catch(err){
-        console.error(err);
-        alert("AI request failed");
-      }finally{
-        setLoadingAI(false);
-      }
-    };
-
+      const res = await axios.post(
+        "https://codesync-1-d3cy.onrender.com/api/ai/interview",
+        { prompt },
+      );
+      setSuggestion(res.data.suggestion);
+      setShowAI(true);
+    } catch (err) {
+      console.error(err);
+      alert("AI request failed");
+    } finally {
+      setLoadingAI(false);
+    }
+  };
 
   return (
     <div className="h-screen bg-[#0B1120] text-white flex flex-col">
