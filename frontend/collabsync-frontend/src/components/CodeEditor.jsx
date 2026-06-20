@@ -49,37 +49,7 @@ const CodeEditor = ({ roomId, username, code, setCode }) => {
     }
   };
 
-  const handleAskAI = async () => {
-    const selection = editorRef.current
-      ?.getModel()
-      ?.getValueInRange(editorRef.current.getSelection());
-
-    const promptText = selection || editorRef.current?.getValue();
-
-    if (!promptText) {
-      alert("Please write or select some code!");
-      return;
-    }
-
-    try {
-      const res = await axios.post(
-        "https://codesync-1-d3cy.onrender.com/api/ai/ask",
-        {
-          prompt: promptText,
-        },
-      );
-
-      setAiSuggestion(
-        res.data.suggestion || res.data.interview || "No response received.",
-      );
-
-      setShowModal(true);
-    } catch (err) {
-      console.error(err);
-      alert("AI request failed");
-    }
-  };
-
+  
   const handleInsertSuggestion = () => {
     const editor = editorRef.current;
 
