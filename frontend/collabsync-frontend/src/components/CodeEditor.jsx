@@ -3,7 +3,6 @@ import Editor from "@monaco-editor/react";
 import socket from "../socket";
 import { sendCursorUpdate, renderRemoteCursor } from "../utils/cursorSync";
 import axios from "axios";
-import AIHelperModal from "./AIHelperModal";
 
 const CodeEditor = ({ roomId, username, code, setCode }) => {
   const editorRef = useRef(null);
@@ -12,8 +11,6 @@ const CodeEditor = ({ roomId, username, code, setCode }) => {
 
   const [output, setOutput] = useState("");
   const [language, setLanguage] = useState("javascript");
-  const [aiSuggestion, setAiSuggestion] = useState("");
-  const [showModal, setShowModal] = useState(false);
 
   const handleMount = (editor) => {
     editorRef.current = editor;
@@ -49,30 +46,14 @@ const CodeEditor = ({ roomId, username, code, setCode }) => {
     }
   };
 
-  
-  const handleInsertSuggestion = () => {
-    const editor = editorRef.current;
-
-    if (!editor) return;
-
-    const range = editor.getSelection();
-
-    editor.executeEdits("", [
-      {
-        range,
-        text: aiSuggestion,
-      },
-    ]);
-
-    setShowModal(false);
-  };
-
   const handleChange = (value) => {
-    setCode(value);
+    const updatedCode = value || "";
+
+    setCode(updatedCode);
 
     socket.emit("code-change", {
       roomId,
-      code: value,
+      code: updatedCode,
     });
 
     socket.emit("typing", {
@@ -92,6 +73,7 @@ const CodeEditor = ({ roomId, username, code, setCode }) => {
   useEffect(() => {
     return () => {
       socket.off("cursor_update");
+      clearTimeout(typingTimeoutRef.current);
     };
   }, []);
 
@@ -106,6 +88,7 @@ const CodeEditor = ({ roomId, username, code, setCode }) => {
           <option value="javascript">JavaScript</option>
           <option value="python">Python</option>
           <option value="cpp">C++</option>
+          <option value="java">Java</option>
         </select>
 
         <button
@@ -142,14 +125,6 @@ const CodeEditor = ({ roomId, username, code, setCode }) => {
           {output || "Run your code to see output..."}
         </pre>
       </div>
-
-      {showModal && (
-        <AIHelperModal
-          suggestion={aiSuggestion}
-          onClose={() => setShowModal(false)}
-          onInsert={handleInsertSuggestion}
-        />
-      )}
     </div>
   );
 };
